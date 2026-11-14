@@ -196,7 +196,10 @@ content:
         default: true
         description: Untick when someone leaves the board. They move to "Past boards".
       - { name: photo, label: Photo, type: image, options: { media: images } }
-      - { name: photo_alt, label: Photo description (alt text), type: string }
+      - name: photo_alt
+        label: Photo description (optional)
+        type: string
+        description: Optional. The name is shown next to the photo, so you can leave this blank.
       - { name: major, label: Major, type: string }
       - { name: year, label: Year, type: string }
       - { name: link, label: LinkedIn or website, type: string }

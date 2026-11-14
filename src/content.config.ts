@@ -71,8 +71,9 @@ const officers = defineCollection({
         year: optionalText,
         link: optionalUrl,
         active: z.boolean().default(true),
-      })
-      .refine((o) => !o.photo || o.photo_alt, { message: 'Add alt text for the photo', path: ['photo_alt'] }),
+      }),
+  // No alt-text requirement here: the officer's name is printed right next to the
+  // photo, so an empty alt (decorative) is the accessible choice when none is given.
 });
 
 const projects = defineCollection({
@@ -166,12 +167,13 @@ const settings = defineCollection({
     hero_secondary_label: z.string().default('See our projects'),
     recruiting: z.boolean().default(false),
     recruiting_banner: optionalText,
-    join_url: z.string().min(1),
+    join_url: z.string().trim().min(1),
     meeting_day: optionalText,
     meeting_time: optionalText,
     meeting_place: optionalText,
     instagram_url: optionalUrl,
-    email: z.email(),
+    // Trim first: pasted values often carry a stray space.
+    email: z.string().trim().pipe(z.email('Enter a valid email address, e.g. synapse@example.org')),
     contact_forms: z
       .array(z.object({ label: z.string(), url: z.string(), description: z.string().nullish() }))
       .nullish()
