@@ -9,7 +9,7 @@ Synapse is a student-led community dedicated to making neurotechnology more acce
 
 ## How we're organized
 
-Synapse runs three kinds of activities:
+Synapse runs four kinds of activities:
 
 - **Engineering Projects**: hands-on teams building EEG, brain-computer interface, and neural-data tools.
 - **Journal Club & Research**: members read, present and debate current neuroscience and neurotechnology papers.
