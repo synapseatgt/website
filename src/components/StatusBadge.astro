@@ -1,0 +1,57 @@
+---
+/**
+ * Project status. Meaning is carried by the word and the badge style, never by
+ * colour alone: Active = solid blue, Recruiting = blue outline (+ decorative
+ * yellow dot), Planned = grey outline, Completed = grey fill.
+ */
+interface Props {
+  status: 'Planned' | 'Recruiting' | 'Active' | 'Completed';
+}
+const { status } = Astro.props;
+---
+
+<span class:list={['badge', `badge-${status.toLowerCase()}`]}>
+  {status === 'Recruiting' && <span class="dot" aria-hidden="true" />}
+  {status}
+</span>
+
+<style>
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1.5px solid transparent;
+    white-space: nowrap;
+  }
+  .badge-active {
+    background: var(--blue);
+    color: #fff;
+  }
+  .badge-recruiting {
+    border-color: var(--blue);
+    color: var(--blue);
+    background: #fff;
+  }
+  .badge-planned {
+    border-color: var(--muted);
+    color: var(--muted);
+    background: #fff;
+  }
+  .badge-completed {
+    background: #e7eaf1;
+    color: var(--ink);
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--yellow);
+    box-shadow: 0 0 0 1.5px var(--blue);
+  }
+</style>

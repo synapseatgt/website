@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import PublicationCard from '../../components/PublicationCard.astro';
+import FilterBar from '../../components/FilterBar.astro';
+import { getPublications } from '../../lib/content';
+import { categorySlug } from '../../lib/categories';
+import { PUBLICATION_TYPES } from '../../content.config';
+
+const pubs = await getPublications();
+const typesInUse = PUBLICATION_TYPES.filter((t) => pubs.some((p) => p.data.type === t));
+---
+
+<BaseLayout
+  title="Publications"
+  description="Newsletters and member articles from Synapse, the neurotechnology club at Georgia Tech."
+>
+  <PageHeader
+    eyebrow="Publications"
+    title="Newsletters & articles"
+    intro="Every issue of the Synapse newsletter, plus articles written by members."
+  />
+
+  <section class="section container" aria-labelledby="pubs-heading">
+    <h2 id="pubs-heading" class="visually-hidden">All publications</h2>
+    {typesInUse.length > 1 && <FilterBar label="Filter publications by type" categories={typesInUse} />}
+    {
+      pubs.length ? (
+        <div class="grid-cards" data-filterable>
+          {pubs.map((p) => (
+            <div data-category={categorySlug(p.data.type)} style="display:flex">
+              <PublicationCard publication={p} />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p class="empty-note">The first issue is on its way.</p>
+      )
+    }
+  </section>
+</BaseLayout>
+
+<style>
+  [data-category] > :global(*) {
+    flex: 1;
+  }
+</style>

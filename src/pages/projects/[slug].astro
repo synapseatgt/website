@@ -1,0 +1,300 @@
+---
+import { render } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import Network from '../../components/Network.astro';
+import { href } from '../../lib/url';
+import { getProjects, lastModified, formatUpdated } from '../../lib/content';
+import { formatDate } from '../../lib/dates';
+import { hashString } from '../../lib/network';
+import { categorySlug } from '../../lib/categories';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}
+
+const { project } = Astro.props;
+const { data } = project;
+const { Content } = await render(project);
+const updated = lastModified(project.filePath);
+const timeline =
+  data.start_date && data.end_date
+    ? `${formatDate(data.start_date)} – ${formatDate(data.end_date)}`
+    : data.start_date
+      ? `Started ${formatDate(data.start_date)}`
+      : undefined;
+---
+
+<BaseLayout title={data.title} description={data.summary}>
+  <section class="band head">
+    <div class="net" aria-hidden="true"><Network seed={hashString(project.id)} width={700} height={360} count={24} /></div>
+    <div class="container inner">
+      <a class="back arrow-back" href={href('/projects')}>All projects</a>
+      <div class="meta">
+        <StatusBadge status={data.status} />
+        <a class="tag" href={href(`/projects?category=${categorySlug(data.category)}`)}>{data.category}</a>
+      </div>
+      <h1>{data.title}</h1>
+      <p class="lede">{data.summary}</p>
+      {
+        data.status === 'Recruiting' && data.recruitment_url && (
+          <div class="btn-row">
+            <a class="btn btn-primary" href={data.recruitment_url}>Apply to join this team</a>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <div class="section container layout">
+    <article class="main">
+      {
+        data.cover && (
+          <Image
+            class="cover"
+            src={data.cover}
+            alt={data.cover_alt ?? ''}
+            widths={[640, 960, 1280]}
+            sizes="(max-width: 900px) 100vw, 760px"
+            loading="eager"
+          />
+        )
+      }
+      <div class="prose"><Content /></div>
+
+      {
+        data.goals && (
+          <section class="block" aria-labelledby="goals">
+            <h2 id="goals">Goals & deliverables</h2>
+            <p>{data.goals}</p>
+          </section>
+        )
+      }
+
+      {
+        data.outputs.length > 0 && (
+          <section class="block" aria-labelledby="outputs">
+            <h2 id="outputs">Outputs</h2>
+            <ul class="outputs">
+              {data.outputs.map((o) => (
+                <li>
+                  <a href={href(o.url)}>{o.title}</a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      {
+        data.updates.length > 0 && (
+          <section class="block" aria-labelledby="updates">
+            <h2 id="updates">Progress updates</h2>
+            <ol class="updates">
+              {[...data.updates]
+                .sort((a, b) => b.date.localeCompare(a.date))
+                .map((u) => (
+                  <li>
+                    <time class="mono" datetime={u.date}>{formatDate(u.date)}</time>
+                    <p>{u.text}</p>
+                  </li>
+                ))}
+            </ol>
+          </section>
+        )
+      }
+    </article>
+
+    <aside class="card facts" aria-label="Project details">
+      <dl>
+        <div><dt>Status</dt><dd><StatusBadge status={data.status} /></dd></div>
+        <div><dt>Category</dt><dd>{data.category}</dd></div>
+        {data.lead && <div><dt>Team lead</dt><dd>{data.lead}</dd></div>}
+        {data.members.length > 0 && <div><dt>Team</dt><dd>{data.members.join(', ')}</dd></div>}
+        {
+          data.skills.length > 0 && (
+            <div>
+              <dt>Skills & tools</dt>
+              <dd>
+                <ul class="chips">{data.skills.map((s) => <li>{s}</li>)}</ul>
+              </dd>
+            </div>
+          )
+        }
+        {timeline && <div><dt>Timeline</dt><dd>{timeline}</dd></div>}
+        {data.github && <div><dt>Code</dt><dd><a href={data.github}>GitHub repository</a></dd></div>}
+        <div><dt>Last updated</dt><dd>{formatUpdated(updated)}</dd></div>
+      </dl>
+      {
+        data.recruitment_url && data.status !== 'Completed' && (
+          <a class="btn btn-secondary" href={data.recruitment_url}>Get involved</a>
+        )
+      }
+    </aside>
+  </div>
+</BaseLayout>
+
+<style>
+  .head {
+    position: relative;
+    overflow: hidden;
+    border-top: 0;
+  }
+  .net {
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: min(50%, 700px);
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 50%);
+    mask-image: linear-gradient(to right, transparent, #000 50%);
+  }
+  .inner {
+    position: relative;
+    padding-top: 40px;
+    padding-bottom: 56px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .inner h1 {
+    font-size: clamp(34px, 5vw, 52px);
+    max-width: 22ch;
+  }
+  .arrow-back {
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    align-self: flex-start;
+    padding: 6px 0;
+  }
+  .arrow-back::before {
+    content: '← ';
+  }
+  .arrow-back:hover {
+    text-decoration: underline;
+  }
+  .meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .meta .tag {
+    text-decoration: none;
+    color: var(--muted);
+  }
+  .meta .tag:hover {
+    color: var(--blue);
+    text-decoration: underline;
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 48px;
+    align-items: start;
+  }
+  .main {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    min-width: 0;
+  }
+  .cover {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+  }
+  .block {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 70ch;
+  }
+  .block h2 {
+    font-size: 26px;
+  }
+  .outputs {
+    margin: 0;
+    padding-left: 1.2em;
+  }
+  .updates {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-left: 2px solid var(--line);
+  }
+  .updates li {
+    position: relative;
+    padding: 0 0 20px 22px;
+  }
+  .updates li::before {
+    content: '';
+    position: absolute;
+    left: -7px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--yellow);
+    border: 2px solid #fff;
+  }
+  .updates time {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .facts {
+    padding: 24px;
+    position: sticky;
+    top: 96px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  dl {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  dt {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  dd {
+    margin: 4px 0 0;
+    font-size: 16px;
+  }
+  .chips {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .chips li {
+    font-size: 13px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--blue-soft);
+    color: var(--blue);
+    font-weight: 600;
+  }
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+    .facts {
+      position: static;
+    }
+    .net {
+      width: 100%;
+      opacity: 0.3;
+    }
+  }
+</style>

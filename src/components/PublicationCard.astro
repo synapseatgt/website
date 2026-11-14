@@ -1,0 +1,63 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import CardArt from './CardArt.astro';
+import { href } from '../lib/url';
+import { formatDate } from '../lib/dates';
+
+interface Props {
+  publication: CollectionEntry<'publications'>;
+  horizontal?: boolean;
+  headingLevel?: 'h2' | 'h3';
+}
+const { publication, horizontal = false, headingLevel = 'h3' } = Astro.props;
+const { data } = publication;
+const Heading = headingLevel;
+---
+
+<article class:list={['card card-link pub', { horizontal }]}>
+  <CardArt image={data.cover} alt={data.cover_alt} seedKey={publication.id} ratio={horizontal ? '4 / 3' : '16 / 9'} />
+  <div class="body">
+    <p class="meta"><span class="tag">{data.type}</span> <span class="tag">·</span> <time class="tag" datetime={data.date}>{formatDate(data.date)}</time></p>
+    <Heading class="title"><a class="stretched" href={href(`/publications/${publication.id}`)}>{data.title}</a></Heading>
+    <p class="muted">{data.summary}</p>
+  </div>
+</article>
+
+<style>
+  .pub {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .body {
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .title {
+    font-size: 21px;
+  }
+  .muted {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .horizontal {
+    display: grid;
+    grid-template-columns: minmax(0, 220px) 1fr;
+  }
+  .horizontal :global(.art) {
+    border-bottom: 0;
+    border-right: 1px solid var(--line);
+    height: 100%;
+  }
+  @media (max-width: 560px) {
+    .horizontal {
+      grid-template-columns: 1fr;
+    }
+    .horizontal :global(.art) {
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+  }
+</style>

@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Network from '../components/Network.astro';
+import { href } from '../lib/url';
+---
+
+<BaseLayout title="Page not found" description="This page doesn't exist." noindex>
+  <section class="nf">
+    <div class="net" aria-hidden="true"><Network seed={404} count={46} /></div>
+    <div class="inner">
+      <p class="eyebrow">Error 404</p>
+      <h1>This connection didn't fire.</h1>
+      <p class="lede">The page you were looking for has moved or never existed.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href={href('/')}>Back to the home page</a>
+        <a class="btn btn-secondary" href={href('/events')}>See events</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf {
+    position: relative;
+    overflow: hidden;
+    background: var(--tint);
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+  }
+  .net {
+    position: absolute;
+    inset: 0;
+    opacity: 0.6;
+  }
+  .inner {
+    position: relative;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 96px var(--gutter);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 18px;
+  }
+  .lede {
+    background: rgba(243, 246, 252, 0.88);
+    border-radius: 8px;
+    padding: 2px 10px;
+  }
+  .btn-row {
+    justify-content: center;
+  }
+</style>

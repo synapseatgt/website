@@ -1,0 +1,151 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import SignalTrace from '../components/SignalTrace.astro';
+import { href } from '../lib/url';
+import { getPage, getSettings, getProjects } from '../lib/content';
+
+const page = await getPage('get-involved');
+const { Content } = await render(page);
+const settings = await getSettings();
+const recruitingTeams = (await getProjects()).filter((p) => p.data.status === 'Recruiting');
+const meeting = [settings.meeting_day, settings.meeting_time, settings.meeting_place].filter(Boolean).join(' · ');
+---
+
+<BaseLayout title="Get involved" description={page.data.description}>
+  <PageHeader eyebrow="Join Synapse" title={page.data.title} intro="Three steps, no experience needed.">
+    {
+      settings.recruiting && settings.recruiting_banner && (
+        <p class="banner"><span class="dot" aria-hidden="true" />{settings.recruiting_banner}</p>
+      )
+    }
+  </PageHeader>
+
+  <section class="section container">
+    <ol class="steps">
+      <li class="card">
+        <span class="n mono" aria-hidden="true">1</span>
+        <h2>Come to a general body meeting</h2>
+        <p class="muted">{meeting ? meeting : 'Meeting times are posted on the Events page.'}</p>
+        <a class="arrow-link" href={href('/events')}>See upcoming events</a>
+      </li>
+      <li class="card">
+        <span class="n mono" aria-hidden="true">2</span>
+        <h2>Fill in the interest form</h2>
+        <p class="muted">Tell us what you're curious about. It takes two minutes.</p>
+        <a class="btn btn-primary" href={settings.join_url}>Open the interest form</a>
+      </li>
+      <li class="card">
+        <span class="n mono" aria-hidden="true">3</span>
+        <h2>Join a project team or workshop</h2>
+        <p class="muted">Pick an engineering team, the journal club, or start with a workshop.</p>
+        <a class="arrow-link" href={href('/projects')}>Browse projects</a>
+      </li>
+    </ol>
+  </section>
+
+  {
+    recruitingTeams.length > 0 && (
+      <section class="band" aria-labelledby="recruiting-heading">
+        <div class="section container">
+          <p class="eyebrow">Recruiting now</p>
+          <h2 id="recruiting-heading" class="rh">Teams looking for members</h2>
+          <ul class="teams">
+            {recruitingTeams.map((p) => (
+              <li>
+                <a href={href(`/projects/${p.id}`)}>{p.data.title}</a>
+                <span class="tag">{p.data.category}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section container">
+    <div class="prose"><Content /></div>
+    <SignalTrace width={140} class="deco" />
+  </section>
+</BaseLayout>
+
+<style>
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: 24px;
+  }
+  .steps li {
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .steps h2 {
+    font-size: 22px;
+  }
+  .steps .muted {
+    flex: 1;
+  }
+  .n {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1.5px solid var(--blue);
+    color: var(--blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+  .banner {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    align-self: flex-start;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--blue);
+  }
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--yellow);
+  }
+  .rh {
+    margin: 12px 0 24px;
+  }
+  .teams {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .teams li {
+    display: flex;
+    gap: 14px;
+    align-items: baseline;
+    flex-wrap: wrap;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .teams a {
+    font-weight: 700;
+    font-size: 18px;
+  }
+  .section :global(.deco) {
+    margin-top: 40px;
+  }
+</style>

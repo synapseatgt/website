@@ -1,0 +1,142 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/brand/synapse-mark.png';
+import SignalTrace from './SignalTrace.astro';
+import { href } from '../lib/url';
+import { getSettings, lastModified, formatUpdated } from '../lib/content';
+
+const settings = await getSettings();
+const updated = lastModified();
+---
+
+<footer class="site-footer">
+  <div class="container grid">
+    <div class="about">
+      <a class="brand" href={href('/')}>
+        <span class="tile"><Image src={logo} alt="" width={40} height={40} densities={[1, 2]} /></span>
+        <span>Synapse at Georgia Tech</span>
+      </a>
+      <p>
+        Synapse is a registered student organization at Georgia Tech. This site is run by students and does not
+        represent the views of the Georgia Institute of Technology.
+      </p>
+      <SignalTrace width={120} />
+    </div>
+
+    <nav aria-label="Footer">
+      <h2 class="eyebrow">Explore</h2>
+      <ul>
+        <li><a href={href('/about')}>About</a></li>
+        <li><a href={href('/projects')}>Projects</a></li>
+        <li><a href={href('/events')}>Events</a></li>
+        <li><a href={href('/publications')}>Publications</a></li>
+        <li><a href={href('/get-involved')}>Get involved</a></li>
+      </ul>
+    </nav>
+
+    <div>
+      <h2 class="eyebrow">Connect</h2>
+      <ul>
+        {settings.instagram_url && <li><a href={settings.instagram_url}>Instagram</a></li>}
+        <li><a href={`mailto:${settings.email}`}>{settings.email}</a></li>
+        <li><a href={href('/contact')}>Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container legal">
+    <p>Last updated <time datetime={(updated ?? new Date()).toISOString()}>{formatUpdated(updated)}</time></p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--blue);
+    color: #fff;
+    margin-top: auto;
+  }
+  .grid {
+    padding-top: 56px;
+    padding-bottom: 40px;
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: 40px;
+  }
+  .about {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 520px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+  }
+  .tile {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .tile img {
+    width: 40px;
+    height: 40px;
+  }
+  p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #e6edf8;
+  }
+  .eyebrow {
+    color: #dbe5f5;
+    margin-bottom: 12px;
+    font-size: 12px;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  a {
+    color: #fff;
+  }
+  ul a {
+    display: inline-block;
+    padding: 6px 0;
+    font-size: 15px;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+  ul a:hover {
+    color: #fff;
+    text-decoration: underline;
+  }
+  .site-footer :global(:focus-visible) {
+    box-shadow: 0 0 0 3px var(--blue), 0 0 0 5px #fff;
+  }
+  .legal {
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+    padding-top: 18px;
+    padding-bottom: 24px;
+  }
+  @media (max-width: 760px) {
+    .grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .about {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

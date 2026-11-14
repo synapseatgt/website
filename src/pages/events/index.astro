@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import EventItem from '../../components/EventItem.astro';
+import FilterBar from '../../components/FilterBar.astro';
+import { href } from '../../lib/url';
+import { getEventsSplit, getSettings, hasDetailPage } from '../../lib/content';
+import { wallToDate } from '../../lib/dates';
+import { EVENT_CATEGORIES } from '../../content.config';
+
+const settings = await getSettings();
+const { upcoming, past } = await getEventsSplit();
+
+const jsonLd = upcoming.map((e) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: e.data.title,
+  description: e.data.summary,
+  startDate: wallToDate(e.data.start).toISOString(),
+  ...(e.data.end ? { endDate: wallToDate(e.data.end).toISOString() } : {}),
+  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+  eventStatus: 'https://schema.org/EventScheduled',
+  location: { '@type': 'Place', name: e.data.location, address: 'Georgia Tech, Atlanta, GA' },
+  organizer: { '@type': 'Organization', name: settings.site_title, url: new URL(href('/'), Astro.site).href },
+  ...(hasDetailPage(e) ? { url: new URL(href(`/events/${e.id}`), Astro.site).href } : {}),
+}));
+---
+
+<BaseLayout
+  title="Events"
+  description="General body meetings, workshops, journal clubs and speaker events from Synapse at Georgia Tech."
+  jsonLd={jsonLd}
+>
+  <PageHeader
+    eyebrow="Events"
+    title="On the calendar"
+    intro="All events are hosted by Synapse and open to every Georgia Tech student. Add any event to your calendar with one click."
+  >
+    {
+      settings.meeting_day && (
+        <p class="meeting">
+          General body meetings: <strong>{settings.meeting_day}</strong>
+          {settings.meeting_time && <>, {settings.meeting_time}</>}
+          {settings.meeting_place && <>, {settings.meeting_place}</>}
+        </p>
+      )
+    }
+  </PageHeader>
+
+  <section class="section container" aria-labelledby="upcoming-heading">
+    <h2 id="upcoming-heading">Upcoming</h2>
+    <FilterBar label="Filter events by type" categories={EVENT_CATEGORIES} />
+    <ul class="list" data-filterable data-upcoming-list data-empty-id="no-upcoming">
+      {upcoming.map((e) => <EventItem event={e} />)}
+    </ul>
+    <p id="no-upcoming" class="empty-note" hidden={upcoming.length > 0}>
+      No events are scheduled yet. New events are posted on
+      {settings.instagram_url ? <a href={settings.instagram_url}>Instagram</a> : 'Instagram'} first.
+    </p>
+    <p class="empty-note" data-filter-empty hidden>No upcoming events of this type.</p>
+  </section>
+
+  {
+    past.length > 0 && (
+      <section class="band" aria-labelledby="past-heading">
+        <div class="section container">
+          <h2 id="past-heading">Past events</h2>
+          <ul class="list past" data-filterable>
+            {past.map((e) => <EventItem event={e} />)}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style>
+  h2 {
+    margin-bottom: 20px;
+  }
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-width: 860px;
+  }
+  .meeting {
+    font-size: 16px;
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--yellow);
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    align-self: flex-start;
+  }
+  .past :global(.links a[download]) {
+    display: none;
+  }
+</style>

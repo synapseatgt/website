@@ -1,0 +1,271 @@
+# Pages CMS configuration — https://pagescms.org/docs/configuration/
+#
+# This file decides which forms officers see at app.pagescms.org.
+# Field names and allowed values must match src/content.config.ts: if you add,
+# rename or remove a field here, change it there too (and vice versa).
+
+media:
+  # Images are stored in src/assets/uploads and written into content as
+  # "@uploads/<file>", which lets Astro resize and compress them at build time.
+  - name: images
+    label: Images
+    input: src/assets/uploads
+    output: "@uploads"
+    categories: [image]
+    rename: safe
+  # PDFs (e.g. newsletter downloads) are served as-is.
+  - name: files
+    label: Files (PDF)
+    input: public/files
+    output: /files
+    extensions: [pdf]
+    rename: safe
+
+content:
+  # ------------------------------------------------------------------ Projects
+  - name: projects
+    label: Projects
+    type: collection
+    path: src/content/projects
+    filename: "{primary}.md"
+    view:
+      fields: [title, status, category, featured]
+      primary: title
+      sort: [title, status]
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - name: summary
+        label: Summary
+        type: text
+        required: true
+        description: One or two sentences, at most 160 characters. Shown on cards.
+      - name: category
+        label: Category
+        type: select
+        required: true
+        options:
+          values: [Engineering Projects, Journal Club & Research, Workshops & Education]
+      - name: status
+        label: Status
+        type: select
+        required: true
+        description: Completed projects move to the archive. They need an end date and at least one output.
+        options:
+          values: [Planned, Recruiting, Active, Completed]
+      - name: featured
+        label: Feature on home page
+        type: boolean
+        default: false
+      - { name: cover, label: Cover image, type: image, options: { media: images } }
+      - name: cover_alt
+        label: Cover image description (alt text)
+        type: string
+        description: Describe the image for people using screen readers. Required if there is a cover image.
+      - { name: lead, label: Team lead, type: string }
+      - { name: members, label: Team members, type: string, list: true }
+      - { name: skills, label: Skills & tools, type: string, list: true }
+      - { name: goals, label: Goals & deliverables, type: text }
+      - { name: start_date, label: Start date, type: date }
+      - { name: end_date, label: End date, type: date }
+      - { name: github, label: GitHub URL, type: string, description: "Starts with https://" }
+      - name: outputs
+        label: Outputs (posters, papers, demos)
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Title, type: string, required: true }
+          - { name: url, label: Link, type: string, required: true }
+      - name: recruitment_url
+        label: Recruitment / application link
+        type: string
+        description: Shown as a button while the project is Recruiting.
+      - name: updates
+        label: Progress updates
+        type: object
+        list: true
+        fields:
+          - { name: date, label: Date, type: date, required: true }
+          - { name: text, label: Update, type: text, required: true }
+      - name: draft
+        label: Draft (hide from the site)
+        type: boolean
+        default: false
+      - { name: body, label: Long description, type: rich-text, options: { media: images } }
+
+  # -------------------------------------------------------------------- Events
+  - name: events
+    label: Events
+    type: collection
+    path: src/content/events
+    filename: "{year}-{month}-{day}-{primary}.md"
+    view:
+      fields: [title, start, category]
+      primary: title
+      sort: [start, title]
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - name: start
+        label: Starts (Atlanta time)
+        type: date
+        required: true
+        options:
+          time: true
+      - name: end
+        label: Ends (Atlanta time)
+        type: date
+        options:
+          time: true
+      - { name: location, label: Location, type: string, required: true }
+      - name: category
+        label: Category
+        type: select
+        required: true
+        options:
+          values: [General Meeting, Workshop, Journal Club, Speaker, Showcase, Social]
+      - name: summary
+        label: Short description
+        type: text
+        required: true
+        description: Shown on the event card, at most 220 characters.
+      - { name: registration_url, label: Registration link, type: string }
+      - { name: image, label: Image, type: image, options: { media: images } }
+      - { name: image_alt, label: Image description (alt text), type: string }
+      - name: draft
+        label: Draft (hide from the site)
+        type: boolean
+        default: false
+      - name: body
+        label: Long description (optional)
+        type: rich-text
+        description: If you write a long description, the event gets its own page.
+        options: { media: images }
+
+  # -------------------------------------------------------------- Publications
+  - name: publications
+    label: Publications
+    type: collection
+    path: src/content/publications
+    filename: "{year}-{month}-{day}-{primary}.md"
+    view:
+      fields: [title, date, type]
+      primary: title
+      sort: [date, title]
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: date, label: Date, type: date, required: true }
+      - name: type
+        label: Type
+        type: select
+        required: true
+        options:
+          values: [Newsletter, Article]
+      - { name: summary, label: Summary, type: text, required: true }
+      - { name: cover, label: Cover image, type: image, options: { media: images } }
+      - { name: cover_alt, label: Cover image description (alt text), type: string }
+      - { name: authors, label: Authors, type: string, list: true }
+      - { name: tags, label: Tags, type: string, list: true }
+      - name: pdf
+        label: PDF version (optional)
+        type: file
+        options: { media: files }
+      - name: draft
+        label: Draft (hide from the site)
+        type: boolean
+        default: true
+      - { name: body, label: Body, type: rich-text, options: { media: images } }
+
+  # ------------------------------------------------------------------ Officers
+  - name: officers
+    label: Officers
+    type: collection
+    path: src/content/officers
+    format: yaml
+    filename: "{primary}.yaml"
+    view:
+      fields: [name, position, term, active]
+      primary: name
+      sort: [order, name, term]
+    fields:
+      - { name: name, label: Name, type: string, required: true }
+      - { name: position, label: Position, type: string, required: true }
+      - { name: order, label: Display order (1 = first), type: number }
+      - { name: term, label: Term (e.g. 2026–27), type: string, required: true }
+      - name: active
+        label: Current officer
+        type: boolean
+        default: true
+        description: Untick when someone leaves the board. They move to "Past boards".
+      - { name: photo, label: Photo, type: image, options: { media: images } }
+      - { name: photo_alt, label: Photo description (alt text), type: string }
+      - { name: major, label: Major, type: string }
+      - { name: year, label: Year, type: string }
+      - { name: link, label: LinkedIn or website, type: string }
+
+  # --------------------------------------------------------------------- Pages
+  - name: about
+    label: About page
+    type: file
+    path: src/content/pages/about.md
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: description, label: Intro sentence, type: text, required: true }
+      - { name: body, label: Body, type: rich-text, options: { media: images } }
+
+  - name: get-involved
+    label: Get Involved page
+    type: file
+    path: src/content/pages/get-involved.md
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: description, label: Intro sentence, type: text, required: true }
+      - { name: body, label: Body, type: rich-text, options: { media: images } }
+
+  - name: contact
+    label: Contact page
+    type: file
+    path: src/content/pages/contact.md
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: description, label: Intro sentence, type: text, required: true }
+      - { name: body, label: Privacy note and extra text, type: rich-text }
+
+  # ------------------------------------------------------------- Site settings
+  - name: settings
+    label: Site settings
+    type: file
+    path: src/content/settings/site.yaml
+    format: yaml
+    fields:
+      - { name: site_title, label: Site name, type: string, required: true }
+      - { name: site_description, label: Site description (search engines), type: text, required: true }
+      - { name: hero_headline, label: Home page headline, type: string, required: true }
+      - { name: hero_text, label: Home page intro, type: text, required: true }
+      - { name: hero_primary_label, label: Main button label, type: string }
+      - { name: hero_secondary_label, label: Second button label, type: string }
+      - name: recruiting
+        label: Recruiting now
+        type: boolean
+        description: Shows the recruiting banner on the home and Get Involved pages.
+      - { name: recruiting_banner, label: Recruiting banner text, type: string }
+      - name: join_url
+        label: Join / interest form link
+        type: string
+        required: true
+        description: Every "interest form" link on the site uses this.
+      - { name: meeting_day, label: General meeting day, type: string }
+      - { name: meeting_time, label: General meeting time, type: string }
+      - { name: meeting_place, label: General meeting place, type: string }
+      - { name: instagram_url, label: Instagram link, type: string }
+      - { name: email, label: Contact email, type: string, required: true }
+      - name: contact_forms
+        label: Contact forms
+        type: object
+        list: true
+        fields:
+          - { name: label, label: Button label, type: string, required: true }
+          - { name: url, label: Form link, type: string, required: true }
+          - { name: description, label: Description, type: string }
+      - { name: show_advisor, label: Show faculty advisor on About page, type: boolean }
+      - { name: advisor_name, label: Advisor name, type: string }
+      - { name: advisor_title, label: Advisor title, type: string }
+      - { name: advisor_url, label: Advisor web page, type: string }

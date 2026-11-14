@@ -1,0 +1,106 @@
+---
+/**
+ * Decorative connectome graphic. A few edges "fire" (a yellow pulse travels
+ * along them) every second or so; with reduced motion it stays still.
+ */
+import { buildNetwork } from '../lib/network';
+
+interface Props {
+  seed?: number;
+  width?: number;
+  height?: number;
+  count?: number;
+  animate?: boolean;
+  class?: string;
+}
+const { seed = 7, width = 1400, height = 640, count = 70, animate = true, class: className } = Astro.props;
+const { nodes, edges } = buildNetwork({ seed, width, height, count });
+---
+
+<svg
+  class:list={['network', className]}
+  aria-hidden="true"
+  focusable="false"
+  viewBox={`0 0 ${width} ${height}`}
+  preserveAspectRatio="xMidYMid slice"
+  data-network={animate ? '' : undefined}
+>
+  <g class="edges">
+    {
+      edges.map((e) => (
+        <line x1={nodes[e.a].x} y1={nodes[e.a].y} x2={nodes[e.b].x} y2={nodes[e.b].y} />
+      ))
+    }
+  </g>
+  <g class="nodes">{nodes.map((n) => <circle cx={n.x} cy={n.y} r={n.r} fill={n.fill} />)}</g>
+</svg>
+
+<style>
+  .network {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .edges line {
+    stroke: var(--edge);
+    stroke-width: 1.25;
+    vector-effect: non-scaling-stroke;
+  }
+  .edges line:global(.fire) {
+    stroke: var(--yellow);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 18 400;
+    animation: fire 1.6s ease-out forwards;
+  }
+  .nodes circle {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .nodes circle:global(.pulse) {
+    animation: pulse 1.6s ease-out;
+  }
+  @keyframes fire {
+    from {
+      stroke-dashoffset: 18;
+    }
+    to {
+      stroke-dashoffset: -400;
+    }
+  }
+  @keyframes pulse {
+    40% {
+      transform: scale(1.6);
+    }
+  }
+</style>
+
+<script>
+  // ~0.6 KB. Picks a random edge every so often and sends a pulse along it.
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  document.querySelectorAll<SVGSVGElement>('svg[data-network]').forEach((svg) => {
+    const lines = Array.from(svg.querySelectorAll('line'));
+    const circles = Array.from(svg.querySelectorAll('circle'));
+    if (!lines.length) return;
+    let visible = true;
+    new IntersectionObserver(([e]) => (visible = e.isIntersecting)).observe(svg);
+    const fire = () => {
+      if (reduce.matches || !visible || document.hidden) return;
+      const line = lines[Math.floor(Math.random() * lines.length)];
+      line.classList.remove('fire');
+      // restart the animation
+      void line.getBoundingClientRect();
+      line.classList.add('fire');
+      setTimeout(() => line.classList.remove('fire'), 1700);
+      const x2 = line.x2.baseVal.value, y2 = line.y2.baseVal.value;
+      const target = circles.find((c) => c.cx.baseVal.value === x2 && c.cy.baseVal.value === y2);
+      if (target) {
+        setTimeout(() => {
+          target.classList.add('pulse');
+          setTimeout(() => target.classList.remove('pulse'), 1700);
+        }, 900);
+      }
+    };
+    setInterval(fire, 700);
+  });
+</script>

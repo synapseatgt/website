@@ -1,0 +1,310 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Network from '../components/Network.astro';
+import SignalTrace from '../components/SignalTrace.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import EventItem from '../components/EventItem.astro';
+import PublicationCard from '../components/PublicationCard.astro';
+import { href } from '../lib/url';
+import { getSettings, getFeaturedProjects, getEventsSplit, getPublications } from '../lib/content';
+
+const settings = await getSettings();
+const featured = await getFeaturedProjects(3);
+const { upcoming } = await getEventsSplit();
+// Render a few extra so the page still shows three if one passes before the next rebuild.
+const upcomingShown = upcoming.slice(0, 6);
+const latest = (await getPublications())[0];
+
+const pillars = [
+  {
+    n: '01',
+    title: 'Engineering Projects',
+    text: 'Hands-on teams building EEG, brain-computer interface and neural data tools.',
+    link: '/projects?category=engineering-projects',
+    label: 'See engineering projects',
+  },
+  {
+    n: '02',
+    title: 'Journal Club & Research',
+    text: 'Read, present and debate current neuroscience and neurotechnology papers.',
+    link: '/projects?category=journal-club-research',
+    label: 'See journal club and research',
+  },
+  {
+    n: '03',
+    title: 'Workshops & Education',
+    text: 'Intro neurotech workshops, Python and signal-processing tutorials, guest talks.',
+    link: '/events?category=workshop',
+    label: 'See workshops',
+  },
+];
+---
+
+<BaseLayout>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-net" aria-hidden="true">
+      <Network seed={20261114} count={74} />
+    </div>
+    <div class="hero-inner">
+      {
+        settings.recruiting && settings.recruiting_banner && (
+          <a class="pill" href={href('/get-involved')}>
+            <span class="pill-dot" aria-hidden="true" />
+            {settings.recruiting_banner}
+          </a>
+        )
+      }
+      <h1><span class="halo">{settings.hero_headline}</span></h1>
+      <p class="hero-text"><span class="halo">{settings.hero_text}</span></p>
+      <div class="btn-row center">
+        <a class="btn btn-primary" href={href('/get-involved')}>{settings.hero_primary_label}</a>
+        <a class="btn btn-secondary" href={href('/projects')}>{settings.hero_secondary_label}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- What we do -->
+  <section class="section container" aria-labelledby="what-heading">
+    <div class="stack" style="--stack-gap: 12px; margin-bottom: 32px">
+      <p class="eyebrow">What we do</p>
+      <h2 id="what-heading">Three ways to get into neurotech</h2>
+    </div>
+    <div class="pillars">
+      {
+        pillars.map((p) => (
+          <div class="card pillar">
+            <span class="num mono" aria-hidden="true">{p.n}</span>
+            <h3>{p.title}</h3>
+            <p class="muted">{p.text}</p>
+            <a class="arrow-link" href={href(p.link)} aria-label={p.label}>Learn more</a>
+          </div>
+        ))
+      }
+    </div>
+    <p class="muted note">Members come from EE, BME, neuroscience, CS and more. No experience required.</p>
+  </section>
+
+  <!-- Featured projects -->
+  <section class="band" aria-labelledby="projects-heading">
+    <div class="section container">
+      <div class="section-head">
+        <div class="stack" style="--stack-gap: 12px">
+          <p class="eyebrow">Featured projects</p>
+          <h2 id="projects-heading">What members are building</h2>
+        </div>
+        <a class="arrow-link" href={href('/projects')}>All projects</a>
+      </div>
+      {
+        featured.length ? (
+          <div class="grid-cards">
+            {featured.map((p) => <ProjectCard project={p} />)}
+          </div>
+        ) : (
+          <p class="empty-note">Project teams for this semester are forming now. Check back soon.</p>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- Events + get involved -->
+  <section class="section container split">
+    <div class="stack" aria-labelledby="events-heading">
+      <p class="eyebrow">Upcoming events</p>
+      <h2 id="events-heading">On the calendar</h2>
+      <ul class="event-list" data-upcoming-list data-limit="3" data-empty-id="no-events">
+        {upcomingShown.map((e, i) => <EventItem event={e} compact hidden={i >= 3} />)}
+      </ul>
+      <p id="no-events" class="empty-note" hidden={upcomingShown.length > 0}>
+        New events are posted on {settings.instagram_url ? <a href={settings.instagram_url}>Instagram</a> : 'Instagram'} first.
+        Check back soon, or come to a general body meeting.
+      </p>
+      <a class="arrow-link" href={href('/events')}>All events</a>
+    </div>
+
+    <div class="stack" aria-labelledby="join-heading">
+      <p class="eyebrow">Get involved</p>
+      <h2 id="join-heading">Start this semester</h2>
+      <ol class="steps">
+        <li><span class="step mono" aria-hidden="true">1</span><span>Come to a general body meeting.</span></li>
+        <li><span class="step mono" aria-hidden="true">2</span><span>Fill in the <a href={settings.join_url}>interest form</a>.</span></li>
+        <li><span class="step mono" aria-hidden="true">3</span><span>Join a project team or workshop.</span></li>
+      </ol>
+      <div class="btn-row">
+        <a class="btn btn-primary" href={href('/get-involved')}>Join Synapse</a>
+      </div>
+      <SignalTrace width={140} class="trace-deco" />
+    </div>
+  </section>
+
+  {
+    latest && (
+      <section class="container latest" aria-labelledby="pub-heading">
+        <div class="section-head">
+          <div class="stack" style="--stack-gap: 12px">
+            <p class="eyebrow">Latest publication</p>
+            <h2 id="pub-heading" class="visually-hidden">Latest publication</h2>
+          </div>
+          <a class="arrow-link" href={href('/publications')}>All publications</a>
+        </div>
+        <PublicationCard publication={latest} horizontal />
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: var(--tint);
+    border-bottom: 1px solid var(--line);
+    min-height: min(80vh, 760px);
+    display: flex;
+    align-items: center;
+  }
+  .hero-net {
+    position: absolute;
+    inset: 0;
+  }
+  @media (max-width: 720px) {
+    .hero-net {
+      opacity: 0.45;
+    }
+  }
+  .hero-inner {
+    position: relative;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: clamp(72px, 12vw, 128px) var(--gutter);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    text-align: center;
+  }
+  .halo {
+    background: rgba(243, 246, 252, 0.88);
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    padding: 2px 12px;
+    border-radius: 12px;
+  }
+  .hero-text {
+    font-size: clamp(17px, 1.7vw, 19px);
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 62ch;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--blue);
+    text-decoration: none;
+  }
+  .pill:hover {
+    border-color: var(--blue);
+  }
+  .pill-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--yellow);
+    box-shadow: 0 0 0 4px rgba(251, 206, 9, 0.25);
+  }
+  .center {
+    justify-content: center;
+  }
+
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: 24px;
+  }
+  .pillar {
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+  }
+  .pillar::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 28px;
+    width: 40px;
+    height: 4px;
+    border-radius: 0 0 4px 4px;
+    background: var(--yellow);
+  }
+  .num {
+    font-size: 13px;
+    color: var(--blue);
+  }
+  .pillar h3 {
+    font-size: 22px;
+  }
+  .pillar .muted {
+    font-size: 16px;
+    line-height: 1.55;
+    flex: 1;
+  }
+  .note {
+    margin-top: 28px;
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+    gap: 56px;
+  }
+  .event-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .steps {
+    list-style: none;
+    margin: 8px 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .steps li {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    font-size: 17px;
+    line-height: 1.5;
+  }
+  .steps li > span:last-child {
+    padding-top: 4px;
+  }
+  .step {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 1.5px solid var(--blue);
+    color: var(--blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+  .split :global(.trace-deco) {
+    margin-top: 16px;
+  }
+  .latest {
+    padding-bottom: clamp(56px, 8vw, 80px);
+  }
+</style>

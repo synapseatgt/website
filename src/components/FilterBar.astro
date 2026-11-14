@@ -1,0 +1,61 @@
+---
+/**
+ * Category filter buttons. Without JavaScript everything stays visible.
+ * Reads and writes ?category=<slug> so other pages can link to a filtered view.
+ * Items need data-category; lists to filter carry data-filterable.
+ */
+import { categorySlug } from '../lib/categories';
+
+interface Props {
+  label: string;
+  categories: readonly string[];
+}
+const { label, categories } = Astro.props;
+---
+
+<div class="filters" role="group" aria-label={label} data-filter-bar hidden>
+  <button type="button" data-value="" aria-pressed="true">All</button>
+  {
+    categories.map((c) => (
+      <button type="button" data-value={categorySlug(c)} aria-pressed="false">
+        {c}
+      </button>
+    ))
+  }
+</div>
+<p class="visually-hidden" aria-live="polite" data-filter-status></p>
+
+<script>
+  const bar = document.querySelector<HTMLElement>('[data-filter-bar]');
+  if (bar) {
+    bar.hidden = false;
+    const buttons = Array.from(bar.querySelectorAll<HTMLButtonElement>('button'));
+    const status = document.querySelector<HTMLElement>('[data-filter-status]');
+    const apply = (value: string, push: boolean) => {
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.value === value)));
+      let shown = 0;
+      document.querySelectorAll<HTMLElement>('[data-filterable] [data-category]').forEach((el) => {
+        const match = !value || el.dataset.category === value;
+        el.classList.toggle('filtered-out', !match);
+        if (match && !el.hidden) shown++;
+      });
+      document.querySelectorAll<HTMLElement>('[data-filter-empty]').forEach((el) => (el.hidden = shown > 0));
+      if (status) status.textContent = `${shown} shown`;
+      if (push) {
+        const url = new URL(location.href);
+        if (value) url.searchParams.set('category', value);
+        else url.searchParams.delete('category');
+        history.replaceState(null, '', url);
+      }
+    };
+    buttons.forEach((b) => b.addEventListener('click', () => apply(b.dataset.value || '', true)));
+    const initial = new URL(location.href).searchParams.get('category') || '';
+    if (buttons.some((b) => b.dataset.value === initial)) apply(initial, false);
+  }
+</script>
+
+<style is:global>
+  .filtered-out {
+    display: none !important;
+  }
+</style>

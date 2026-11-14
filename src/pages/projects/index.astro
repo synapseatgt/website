@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import FilterBar from '../../components/FilterBar.astro';
+import { href } from '../../lib/url';
+import { getProjects } from '../../lib/content';
+import { PROJECT_CATEGORIES } from '../../content.config';
+
+const all = await getProjects();
+const current = all.filter((p) => p.data.status !== 'Completed');
+const archive = all.filter((p) => p.data.status === 'Completed');
+---
+
+<BaseLayout
+  title="Projects"
+  description="Engineering projects, journal club and research, and workshops run by members of Synapse at Georgia Tech."
+>
+  <PageHeader
+    eyebrow="Projects & initiatives"
+    title="What members are building"
+    intro="Every project shows its status, so you can tell what's planned, what's recruiting and what's already running."
+  />
+
+  <section class="section container" aria-labelledby="current-heading">
+    <h2 id="current-heading" class="visually-hidden">Current projects</h2>
+    <FilterBar label="Filter projects by category" categories={PROJECT_CATEGORIES} />
+    {
+      current.length ? (
+        <div class="grid-cards" data-filterable>
+          {current.map((p) => <ProjectCard project={p} headingLevel="h3" />)}
+        </div>
+      ) : (
+        <p class="empty-note">New project teams are forming. Check back soon.</p>
+      )
+    }
+    <p class="empty-note" data-filter-empty hidden>Nothing in this category right now. Try another, or pitch your own idea on the <a href={href('/contact')}>Contact</a> page.</p>
+  </section>
+
+  {
+    archive.length > 0 && (
+      <section class="band" aria-labelledby="archive-heading">
+        <div class="section container">
+          <div class="stack" style="--stack-gap: 12px; margin-bottom: 32px">
+            <p class="eyebrow">Archive</p>
+            <h2 id="archive-heading">Completed projects</h2>
+          </div>
+          <div class="grid-cards" data-filterable>
+            {archive.map((p) => <ProjectCard project={p} />)}
+          </div>
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>

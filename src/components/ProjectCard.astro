@@ -1,0 +1,59 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import StatusBadge from './StatusBadge.astro';
+import CardArt from './CardArt.astro';
+import { href } from '../lib/url';
+import { categorySlug } from '../lib/categories';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  headingLevel?: 'h2' | 'h3';
+}
+const { project, headingLevel = 'h3' } = Astro.props;
+const { data } = project;
+const Heading = headingLevel;
+---
+
+<article class="card card-link project" data-category={categorySlug(data.category)}>
+  <CardArt image={data.cover} alt={data.cover_alt} seedKey={project.id} />
+  <div class="body">
+    <div class="meta">
+      <StatusBadge status={data.status} />
+      <span class="tag">{data.category}</span>
+    </div>
+    <Heading class="title">
+      <a class="stretched" href={href(`/projects/${project.id}`)}>{data.title}</a>
+    </Heading>
+    <p class="muted">{data.summary}</p>
+  </div>
+</article>
+
+<style>
+  .project {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .project:hover :global(.art img) {
+    transform: translateY(-2px) scale(1.01);
+  }
+  .body {
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .meta {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .title {
+    font-size: 21px;
+  }
+  .muted {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+</style>

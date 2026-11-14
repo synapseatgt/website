@@ -1,0 +1,28 @@
+---
+/** Decorative yellow zig-zag, echoing the trace in the Synapse logo. */
+interface Props {
+  class?: string;
+  width?: number;
+}
+const { class: className, width = 160 } = Astro.props;
+---
+
+<svg
+  class:list={['trace', className]}
+  aria-hidden="true"
+  focusable="false"
+  width={width}
+  viewBox="0 0 160 40"
+  fill="none"
+>
+  <circle cx="10" cy="20" r="8" fill="#FBCE09"></circle>
+  <path d="M10 20 L58 20 L74 6 L96 34 L112 20 L160 20" stroke="#FBCE09" stroke-width="7" stroke-linejoin="miter"
+  ></path>
+</svg>
+
+<style>
+  .trace {
+    display: block;
+    height: auto;
+  }
+</style>
