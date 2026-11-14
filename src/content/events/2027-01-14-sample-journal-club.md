@@ -1,8 +1,11 @@
 ---
-title: "[Sample] Journal Club"
-start: 2027-01-14T18:00
-location: "[Building and room]"
-category: Journal Club
-summary: "[Sample entry] We discuss one recent paper. The reading is posted a week ahead."
+title: Workshop
+start: 2026-10-20T19:00
+end: 2026-10-20T20:00
+location: George Tower Scheller Tower 0350
+category: Workshop
+summary: Create a neural matched-filter with open-source Allen Neuropixels
+  Visual Coding Data.
+registration_url: https://gatech.campuslabs.com/engage/event/12821911
 draft: false
 ---
