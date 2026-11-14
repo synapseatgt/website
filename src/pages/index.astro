@@ -17,21 +17,18 @@ const latest = (await getPublications())[0];
 
 const pillars = [
   {
-    n: '01',
     title: 'Engineering Projects',
     text: 'Hands-on teams building EEG, brain-computer interface and neural data tools.',
     link: '/projects?category=engineering-projects',
     label: 'See engineering projects',
   },
   {
-    n: '02',
     title: 'Journal Club & Research',
     text: 'Read, present and debate current neuroscience and neurotechnology papers.',
     link: '/projects?category=journal-club-research',
     label: 'See journal club and research',
   },
   {
-    n: '03',
     title: 'Workshops & Education',
     text: 'Intro neurotech workshops, Python and signal-processing tutorials, guest talks.',
     link: '/events?category=workshop',
@@ -66,15 +63,11 @@ const pillars = [
 
   <!-- What we do -->
   <section class="section container" aria-labelledby="what-heading">
-    <div class="stack" style="--stack-gap: 12px; margin-bottom: 32px">
-      <p class="eyebrow">What we do</p>
-      <h2 id="what-heading">Three ways to get into neurotech</h2>
-    </div>
+    <h2 id="what-heading" class="what-heading">Three ways to get into neurotech</h2>
     <div class="pillars">
       {
         pillars.map((p) => (
           <div class="card pillar">
-            <span class="num mono" aria-hidden="true">{p.n}</span>
             <h3>{p.title}</h3>
             <p class="muted">{p.text}</p>
             <a class="arrow-link" href={href(p.link)} aria-label={p.label}>Learn more</a>
@@ -252,9 +245,8 @@ const pillars = [
     border-radius: 0 0 4px 4px;
     background: var(--yellow);
   }
-  .num {
-    font-size: 13px;
-    color: var(--blue);
+  .what-heading {
+    margin-bottom: 32px;
   }
   .pillar h3 {
     font-size: 22px;
