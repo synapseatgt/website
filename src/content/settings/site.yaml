@@ -1,22 +1,19 @@
-# Site settings — edited in Pages CMS under "Site settings".
-# Everything marked REPLACE is placeholder text that must be swapped before launch.
 site_title: Synapse at Georgia Tech
-site_description: >-
-  Synapse is the neurotechnology club at Georgia Tech: student teams building EEG and brain-computer
-  interface projects, a journal club, and hands-on workshops. No experience needed.
+site_description: "Synapse is the neurotechnology club at Georgia Tech: student
+  teams building EEG and brain-computer interface projects, a journal club, and
+  hands-on workshops. No previous experience needed!"
 hero_headline: Where neuroscience meets engineering.
-hero_text: >-
-  Synapse is a student organization at Georgia Tech for anyone curious about the brain and the
-  technology that reads it. No neuroscience or engineering experience needed.
+hero_text: Synapse is a registered student organization at Georgia Tech for
+  anyone curious about the brain and the technologies related to it. No prior
+  neuroscience or engineering experience is needed!
 hero_primary_label: Join Synapse
 hero_secondary_label: See our projects
 recruiting: true
-recruiting_banner: "Spring recruiting is open · [apply by date]"
-join_url: https://forms.gle/REPLACE-with-interest-form
+recruiting_banner: Spring recruiting is open / Apply by 1/22/27
+join_url: https://forms.gle/ha9fLmMWyPHYgUkU6
 meeting_day: "[Day of week]"
 meeting_time: "[Time]"
 meeting_place: "[Building and room]"
-instagram_url: ""
 email: synapse-placeholder@example.org
 contact_forms:
   - label: General contact and partnerships
@@ -29,6 +26,3 @@ contact_forms:
     url: https://forms.gle/REPLACE-with-speaker-form
     description: Researchers and industry guests who'd like to give a talk.
 show_advisor: false
-advisor_name: ""
-advisor_title: ""
-advisor_url: ""
