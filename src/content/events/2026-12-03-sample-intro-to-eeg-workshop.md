@@ -1,19 +1,11 @@
 ---
-title: "[Sample] Intro to EEG Workshop"
-start: 2026-12-03T17:00
-end: 2026-12-03T19:00
-location: "[Building and room]"
-category: Workshop
-summary: "[Sample entry] A hands-on introduction to recording and cleaning EEG data. Laptops recommended; no experience needed."
-registration_url: https://forms.gle/REPLACE-with-registration-form
+title: Journal Club
+start: 2026-10-15T18:00
+end: 2026-10-15T19:00
+location: Skiles 311
+category: Journal Club
+summary: "Our first Journal Club! Paper discussed:
+  https://www.sciencedirect.com/science/article/pii/S089662731400018X"
+registration_url: https://gatech.campuslabs.com/engage/event/12877319
 draft: false
 ---
-
-This is **sample content** showing an event with a longer description, which gives it its own page. Events without a long description appear as cards only.
-
-## What to bring
-
-- A laptop with Python installed (we'll help you set it up)
-- Curiosity
-
-Hosted by Synapse.
