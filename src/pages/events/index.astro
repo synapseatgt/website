@@ -31,20 +31,7 @@ const jsonLd = upcoming.map((e) => ({
   description="General body meetings, workshops, journal clubs and speaker events from Synapse at Georgia Tech."
   jsonLd={jsonLd}
 >
-  <PageHeader
-    title="On the calendar"
-    intro="All events are hosted by Synapse and open to every Georgia Tech student. Add any event to your calendar with one click."
-  >
-    {
-      settings.meeting_day && (
-        <p class="meeting">
-          General body meetings: <strong>{settings.meeting_day}</strong>
-          {settings.meeting_time && <>, {settings.meeting_time}</>}
-          {settings.meeting_place && <>, {settings.meeting_place}</>}
-        </p>
-      )
-    }
-  </PageHeader>
+  <PageHeader title="On the calendar" />
 
   <section class="section container" aria-labelledby="upcoming-heading">
     <h2 id="upcoming-heading">Upcoming</h2>
@@ -53,7 +40,7 @@ const jsonLd = upcoming.map((e) => ({
       {upcoming.map((e) => <EventItem event={e} />)}
     </ul>
     <p id="no-upcoming" class="empty-note" hidden={upcoming.length > 0}>
-      No events are scheduled yet. New events are posted on
+      No events are scheduled yet. New events are posted on{' '}
       {settings.instagram_url ? <a href={settings.instagram_url}>Instagram</a> : 'Instagram'} first.
     </p>
     <p class="empty-note" data-filter-empty hidden>No upcoming events of this type.</p>
@@ -82,16 +69,6 @@ const jsonLd = upcoming.map((e) => ({
     margin: 0;
     padding: 0;
     max-width: 860px;
-  }
-  .meeting {
-    font-size: 16px;
-    color: var(--ink);
-    background: rgba(255, 255, 255, 0.85);
-    border: 1px solid var(--line);
-    border-left: 4px solid var(--yellow);
-    padding: 10px 14px;
-    border-radius: var(--radius-sm);
-    align-self: flex-start;
   }
   .past :global(.links a[download]) {
     display: none;

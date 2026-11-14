@@ -61,7 +61,7 @@ content:
         label: Cover image description (alt text)
         type: string
         description: Describe the image for people using screen readers. Required if there is a cover image.
-      - { name: lead, label: Team lead, type: string }
+      - { name: leads, label: Team leads, type: string, list: true }
       - { name: members, label: Team members, type: string, list: true }
       - { name: skills, label: Skills & tools, type: string, list: true }
       - { name: goals, label: Goals & deliverables, type: text }

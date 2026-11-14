@@ -87,6 +87,8 @@ const projects = defineCollection({
         status: z.enum(PROJECT_STATUSES),
         cover: image().nullish(),
         cover_alt: optionalText,
+        leads: textList,
+        /** Older entries used a single "lead"; still accepted and merged into leads. */
         lead: optionalText,
         members: textList,
         skills: textList,
@@ -103,6 +105,7 @@ const projects = defineCollection({
           .transform((v) => v ?? []),
         draft,
       })
+      .transform(({ lead, ...p }) => ({ ...p, leads: lead && !p.leads.includes(lead) ? [lead, ...p.leads] : p.leads }))
       .refine((p) => !p.cover || p.cover_alt, { message: 'Add alt text for the cover image', path: ['cover_alt'] })
       .refine((p) => p.status !== 'Completed' || (p.end_date && p.outputs.length > 0), {
         message: 'A Completed project needs an end date and at least one output',

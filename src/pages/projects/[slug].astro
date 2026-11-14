@@ -111,7 +111,7 @@ const timeline =
       <dl>
         <div><dt>Status</dt><dd><StatusBadge status={data.status} /></dd></div>
         <div><dt>Category</dt><dd>{data.category}</dd></div>
-        {data.lead && <div><dt>Team lead</dt><dd>{data.lead}</dd></div>}
+        {data.leads.length > 0 && <div><dt>{data.leads.length > 1 ? 'Team leads' : 'Team lead'}</dt><dd>{data.leads.join(', ')}</dd></div>}
         {data.members.length > 0 && <div><dt>Team</dt><dd>{data.members.join(', ')}</dd></div>}
         {
           data.skills.length > 0 && (
