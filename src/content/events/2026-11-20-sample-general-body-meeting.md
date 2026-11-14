@@ -1,10 +1,10 @@
 ---
-title: "[Sample] General Body Meeting"
-start: 2026-11-20T18:30
-end: 2026-11-20T19:30
-location: "[Building and room]"
+title: General Meeting
+start: 2026-09-22T18:00
+end: 2026-09-22T19:00
+location: East Architecture 107
 category: General Meeting
-summary: "[Sample entry] Meet the officers, hear about this semester's project teams and find out how to get involved."
-registration_url: ""
+summary: Meet the officers and learn how to get involved.
+registration_url: https://gatech.campuslabs.com/engage/event/12760756
 draft: false
 ---
