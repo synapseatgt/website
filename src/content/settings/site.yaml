@@ -14,15 +14,16 @@ join_url: https://forms.gle/ha9fLmMWyPHYgUkU6
 meeting_day: "[Day of week]"
 meeting_time: "[Time]"
 meeting_place: "[Building and room]"
-email: synapse-placeholder@example.org
+instagram_url: https://www.instagram.com/gtsynapse/
+email: "gatechsynapse@gmail.com "
 contact_forms:
   - label: General contact and partnerships
-    url: https://forms.gle/REPLACE-with-contact-form
-    description: Questions, collaborations, sponsorship and press.
+    url: https://forms.gle/U5cNVKsGXHjPaeAQ8
+    description: For questions, collaborations, sponsorship and press.
   - label: Propose a project
-    url: https://forms.gle/REPLACE-with-project-form
-    description: Have an idea for a build or research question? Pitch it.
+    url: https://forms.gle/k3AQYefAWQ819Bxd8
+    description: Have an idea for a build or research question? Describe it here!
   - label: Speaker or workshop proposal
-    url: https://forms.gle/REPLACE-with-speaker-form
-    description: Researchers and industry guests who'd like to give a talk.
+    url: https://forms.gle/d74WHMFYGMEqYoe3A
+    description: For researchers and industry guests who'd like to give a talk.
 show_advisor: false
