@@ -16,7 +16,6 @@ goals: Develop scientific literacy, critical thinking, and communication skills
   through collaborative exploration of current neuroscience and neurotechnology
   research.
 start_date: 2026-10-15
-end_date: 2026-11-14
 draft: false
 ---
 Synapse's Journal Club gives members the opportunity to explore current research in neuroscience and neurotechnology through student-led presentations and group discussions. Each session focuses on a selected research paper, with members breaking down the background, methods, results, and broader implications of the work. We encourage members to ask questions, challenge conclusions, and think critically about how researchers approach problems in the field.
