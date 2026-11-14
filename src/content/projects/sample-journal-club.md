@@ -1,17 +1,13 @@
 ---
 title: EEG Artifact Detection
-summary: "[Sample entry] Fortnightly sessions reading recent papers on decoding
-  speech and movement from neural signals."
-category: Journal Club & Research
-status: Recruiting
+summary: Identifying and analyzing non-neural artifacts in EEG recordings to
+  improve signal quality.
+category: Engineering Projects
+status: Planned
 featured: true
-lead: "[Organizer name]"
-skills:
-  - Paper reading
-  - Presenting
-start_date: 2026-11-14
-end_date: 2026-11-14
-recruitment_url: https://forms.gle/REPLACE-with-interest-form
+lead: David Kwack
+start_date: 2027-01-11
+end_date: 2027-05-03
 draft: false
 ---
 This is **sample content**. Replace or delete it in Pages CMS before launch.
