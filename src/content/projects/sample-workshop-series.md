@@ -1,12 +1,12 @@
 ---
 title: EEG-Adaptive Lighting
-summary: "[Sample entry] A beginner-friendly series covering neurons, EEG basics
-  and your first signal-processing notebook."
-category: Workshops & Education
+summary: Developing a lighting system that responds to EEG-derived features
+  associated with cognitive states.
+category: Engineering Projects
 status: Planned
 featured: true
-start_date: 2026-11-14
-end_date: 2026-11-14
+start_date: 2027-01-11
+end_date: 2027-05-03
 draft: false
 ---
 This is **sample content**. Replace or delete it in Pages CMS before launch.
