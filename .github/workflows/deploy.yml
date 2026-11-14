@@ -59,6 +59,8 @@ jobs:
 
       - name: Check links, alt text and page titles
         run: node scripts/check-site.mjs
+        env:
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
 
       - name: Upload site
         if: github.event_name != 'pull_request'

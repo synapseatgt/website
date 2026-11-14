@@ -12,6 +12,10 @@ updates:
         patterns: ['*']
         exclude-patterns: ['astro', '@astrojs/*']
     open-pull-requests-limit: 5
+    ignore:
+      # @astrojs/check doesn't support TypeScript 7 yet. Remove once it does.
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
   - package-ecosystem: github-actions
     directory: /
     schedule:
