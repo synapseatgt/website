@@ -39,7 +39,7 @@ const jsonLd = {
     <div class="net" aria-hidden="true"><Network seed={hashString(event.id)} width={700} height={360} count={24} /></div>
     <div class="container inner">
       <a class="back" href={href('/events')}>← All events</a>
-      <p class="eyebrow">{data.category}{isPast && ' · Past event'}</p>
+      <p class="meta-line">{data.category}{isPast && ' · Past event'}</p>
       <h1>{data.title}</h1>
       <p class="when">
         <time datetime={machine(data.start)}>{formatLongDate(data.start)}</time>

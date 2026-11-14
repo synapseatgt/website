@@ -17,7 +17,6 @@ const archive = all.filter((p) => p.data.status === 'Completed');
   description="Engineering projects, journal club and research, and workshops run by members of Synapse at Georgia Tech."
 >
   <PageHeader
-    eyebrow="Projects & initiatives"
     title="What members are building"
     intro="Every project shows its status, so you can tell what's planned, what's recruiting and what's already running."
   />
@@ -41,10 +40,7 @@ const archive = all.filter((p) => p.data.status === 'Completed');
     archive.length > 0 && (
       <section class="band" aria-labelledby="archive-heading">
         <div class="section container">
-          <div class="stack" style="--stack-gap: 12px; margin-bottom: 32px">
-            <p class="eyebrow">Archive</p>
-            <h2 id="archive-heading">Completed projects</h2>
-          </div>
+          <h2 id="archive-heading" style="margin-bottom: 32px">Completed projects</h2>
           <div class="grid-cards" data-filterable>
             {archive.map((p) => <ProjectCard project={p} />)}
           </div>

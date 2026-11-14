@@ -27,7 +27,7 @@ const pastByTerm = Object.entries(
 ---
 
 <BaseLayout title="About" description={page.data.description}>
-  <PageHeader eyebrow="About" title={page.data.title} intro={page.data.description} />
+  <PageHeader title={page.data.title} intro={page.data.description} />
 
   <section class="section container">
     <div class="prose"><Content /></div>
@@ -35,9 +35,9 @@ const pastByTerm = Object.entries(
 
   <section class="band" aria-labelledby="board-heading">
     <div class="section container">
-      <div class="stack" style="--stack-gap: 12px; margin-bottom: 32px">
-        <p class="eyebrow">Executive board{current[0] && ` · ${current[0].data.term}`}</p>
+      <div class="stack" style="--stack-gap: 8px; margin-bottom: 32px">
         <h2 id="board-heading">The people running Synapse</h2>
+        {current[0] && <p class="meta-line">{current[0].data.term} executive board</p>}
       </div>
       <ul class="board">
         {
@@ -63,7 +63,7 @@ const pastByTerm = Object.entries(
       {
         settings.show_advisor && settings.advisor_name && (
           <div class="advisor">
-            <p class="eyebrow">Faculty advisor</p>
+            <h3 class="sub-h">Faculty advisor</h3>
             <p>
               <strong>{settings.advisor_url ? <a href={settings.advisor_url}>{settings.advisor_name}</a> : settings.advisor_name}</strong>
               {settings.advisor_title && <>, {settings.advisor_title}</>}
@@ -81,7 +81,7 @@ const pastByTerm = Object.entries(
         <div class="alumni">
           {pastByTerm.map(([term, people]) => (
             <div>
-              <h3 class="eyebrow">{term}</h3>
+              <h3 class="sub-h">{term}</h3>
               <ul>
                 {people.map((o) => (
                   <li>
@@ -147,6 +147,9 @@ const pastByTerm = Object.entries(
     display: flex;
     flex-direction: column;
     gap: 6px;
+  }
+  .sub-h {
+    font-size: 18px;
   }
   .alumni-h {
     font-size: 26px;

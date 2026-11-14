@@ -24,7 +24,7 @@ const updated = lastModified();
     </div>
 
     <nav aria-label="Footer">
-      <h2 class="eyebrow">Explore</h2>
+      <h2 class="col-h">Explore</h2>
       <ul>
         <li><a href={href('/about')}>About</a></li>
         <li><a href={href('/projects')}>Projects</a></li>
@@ -35,7 +35,7 @@ const updated = lastModified();
     </nav>
 
     <div>
-      <h2 class="eyebrow">Connect</h2>
+      <h2 class="col-h">Connect</h2>
       <ul>
         {settings.instagram_url && <li><a href={settings.instagram_url}>Instagram</a></li>}
         <li><a href={`mailto:${settings.email}`}>{settings.email}</a></li>
@@ -96,10 +96,12 @@ const updated = lastModified();
     line-height: 1.6;
     color: #e6edf8;
   }
-  .eyebrow {
-    color: #dbe5f5;
-    margin-bottom: 12px;
-    font-size: 12px;
+  .col-h {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0;
+    margin-bottom: 10px;
   }
   ul {
     list-style: none;

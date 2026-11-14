@@ -14,7 +14,7 @@ const meeting = [settings.meeting_day, settings.meeting_time, settings.meeting_p
 ---
 
 <BaseLayout title="Get involved" description={page.data.description}>
-  <PageHeader eyebrow="Join Synapse" title={page.data.title} intro="Three steps, no experience needed.">
+  <PageHeader title={page.data.title} intro="Three steps, no experience needed.">
     {
       settings.recruiting && settings.recruiting_banner && (
         <p class="banner"><span class="dot" aria-hidden="true" />{settings.recruiting_banner}</p>
@@ -49,7 +49,6 @@ const meeting = [settings.meeting_day, settings.meeting_time, settings.meeting_p
     recruitingTeams.length > 0 && (
       <section class="band" aria-labelledby="recruiting-heading">
         <div class="section container">
-          <p class="eyebrow">Recruiting now</p>
           <h2 id="recruiting-heading" class="rh">Teams looking for members</h2>
           <ul class="teams">
             {recruitingTeams.map((p) => (
@@ -123,7 +122,7 @@ const meeting = [settings.meeting_day, settings.meeting_time, settings.meeting_p
     background: var(--yellow);
   }
   .rh {
-    margin: 12px 0 24px;
+    margin: 0 0 24px;
   }
   .teams {
     list-style: none;

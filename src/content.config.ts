@@ -185,4 +185,23 @@ const settings = defineCollection({
   }),
 });
 
-export const collections = { officers, projects, events, publications, pages, settings };
+const home = defineCollection({
+  loader: glob({ pattern: '**/*.{yml,yaml}', base: './src/content/home' }),
+  schema: z.object({
+    pillars_heading: z.string().min(1),
+    pillars: z
+      .array(
+        z.object({
+          title: z.string().min(1),
+          text: z.string().min(1).max(200, 'Keep each card to 200 characters'),
+          link: optionalUrl,
+          link_label: optionalText,
+        }),
+      )
+      .min(1, 'Add at least one card')
+      .max(4, 'Use at most four cards'),
+    pillars_note: optionalText,
+  }),
+});
+
+export const collections = { officers, projects, events, publications, pages, settings, home };

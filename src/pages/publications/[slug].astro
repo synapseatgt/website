@@ -21,7 +21,7 @@ const { Content } = await render(publication);
   <article class="container article">
     <header class="stack" style="--stack-gap: 14px">
       <a class="back" href={href('/publications')}>← All publications</a>
-      <p class="eyebrow">{data.type} · <time datetime={data.date}>{formatDate(data.date)}</time></p>
+      <p class="meta-line">{data.type} · <time datetime={data.date}>{formatDate(data.date)}</time></p>
       <h1>{data.title}</h1>
       <p class="lede">{data.summary}</p>
       {data.authors.length > 0 && <p class="by">By {data.authors.join(', ')}</p>}

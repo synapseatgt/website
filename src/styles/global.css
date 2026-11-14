@@ -177,12 +177,10 @@ a:hover {
 }
 
 /* ---------- type helpers ---------- */
-.eyebrow {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+/* Small supporting line under or above a heading (category, date, term). */
+.meta-line {
+  font-size: 16px;
+  font-weight: 600;
   color: var(--muted);
 }
 

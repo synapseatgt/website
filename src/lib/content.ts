@@ -10,6 +10,12 @@ export async function getSettings() {
   return entry.data;
 }
 
+export async function getHome() {
+  const entry = await getEntry('home', 'home');
+  if (!entry) throw new Error('Missing src/content/home/home.yaml');
+  return entry.data;
+}
+
 export async function getPage(id: string) {
   const entry = await getEntry('pages', id);
   if (!entry) throw new Error(`Missing src/content/pages/${id}.md`);

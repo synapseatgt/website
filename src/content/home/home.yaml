@@ -1,0 +1,17 @@
+# Home page sections — edited in Pages CMS under "Home page".
+# (The headline, intro and recruiting banner at the top are in "Site settings".)
+pillars_heading: Three ways to get into neurotech
+pillars:
+  - title: Engineering Projects
+    text: Hands-on teams building EEG, brain-computer interface and neural data tools.
+    link: /projects?category=engineering-projects
+    link_label: Learn more
+  - title: Journal Club & Research
+    text: Read, present and debate current neuroscience and neurotechnology papers.
+    link: /projects?category=journal-club-research
+    link_label: Learn more
+  - title: Workshops & Education
+    text: Intro neurotech workshops, Python and signal-processing tutorials, guest talks.
+    link: /events?category=workshop
+    link_label: Learn more
+pillars_note: Members come from EE, BME, neuroscience, CS and more. No experience required.

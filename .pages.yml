@@ -232,6 +232,38 @@ content:
       - { name: description, label: Intro sentence, type: text, required: true }
       - { name: body, label: Privacy note and extra text, type: rich-text }
 
+  # ----------------------------------------------------------------- Home page
+  - name: home
+    label: Home page
+    type: file
+    path: src/content/home/home.yaml
+    format: yaml
+    fields:
+      - name: pillars_heading
+        label: '"Ways to get involved" heading'
+        type: string
+        required: true
+      - name: pillars
+        label: Cards (1 to 4)
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Title, type: string, required: true }
+          - { name: text, label: Text (max 200 characters), type: text, required: true }
+          - name: link
+            label: Link
+            type: string
+            description: >-
+              A page on this site starting with "/" (e.g. /projects, /events,
+              /projects?category=engineering-projects) or a full https:// link. Leave blank for no link.
+          - name: link_label
+            label: Link text
+            type: string
+            description: Defaults to "Learn more".
+      - name: pillars_note
+        label: Line under the cards
+        type: string
+
   # ------------------------------------------------------------- Site settings
   - name: settings
     label: Site settings

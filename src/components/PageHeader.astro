@@ -1,14 +1,13 @@
 ---
-/** Top band for inner pages: eyebrow, title, intro, with a network on the right. */
+/** Top band for inner pages: title and intro, with a network on the right. */
 import Network from './Network.astro';
 import { hashString } from '../lib/network';
 
 interface Props {
-  eyebrow?: string;
   title: string;
   intro?: string;
 }
-const { eyebrow, title, intro } = Astro.props;
+const { title, intro } = Astro.props;
 ---
 
 <section class="page-header band">
@@ -16,7 +15,6 @@ const { eyebrow, title, intro } = Astro.props;
     <Network seed={hashString(title)} width={700} height={360} count={26} />
   </div>
   <div class="container inner">
-    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
     <h1>{title}</h1>
     {intro && <p class="lede">{intro}</p>}
     <slot />

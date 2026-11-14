@@ -6,7 +6,7 @@ import ProjectCard from '../components/ProjectCard.astro';
 import EventItem from '../components/EventItem.astro';
 import PublicationCard from '../components/PublicationCard.astro';
 import { href } from '../lib/url';
-import { getSettings, getFeaturedProjects, getEventsSplit, getPublications } from '../lib/content';
+import { getSettings, getHome, getFeaturedProjects, getEventsSplit, getPublications } from '../lib/content';
 
 const settings = await getSettings();
 const featured = await getFeaturedProjects(3);
@@ -15,26 +15,7 @@ const { upcoming } = await getEventsSplit();
 const upcomingShown = upcoming.slice(0, 6);
 const latest = (await getPublications())[0];
 
-const pillars = [
-  {
-    title: 'Engineering Projects',
-    text: 'Hands-on teams building EEG, brain-computer interface and neural data tools.',
-    link: '/projects?category=engineering-projects',
-    label: 'See engineering projects',
-  },
-  {
-    title: 'Journal Club & Research',
-    text: 'Read, present and debate current neuroscience and neurotechnology papers.',
-    link: '/projects?category=journal-club-research',
-    label: 'See journal club and research',
-  },
-  {
-    title: 'Workshops & Education',
-    text: 'Intro neurotech workshops, Python and signal-processing tutorials, guest talks.',
-    link: '/events?category=workshop',
-    label: 'See workshops',
-  },
-];
+const home = await getHome();
 ---
 
 <BaseLayout>
@@ -63,29 +44,31 @@ const pillars = [
 
   <!-- What we do -->
   <section class="section container" aria-labelledby="what-heading">
-    <h2 id="what-heading" class="what-heading">Three ways to get into neurotech</h2>
+    <h2 id="what-heading" class="what-heading">{home.pillars_heading}</h2>
     <div class="pillars">
       {
-        pillars.map((p) => (
+        home.pillars.map((p) => (
           <div class="card pillar">
             <h3>{p.title}</h3>
             <p class="muted">{p.text}</p>
-            <a class="arrow-link" href={href(p.link)} aria-label={p.label}>Learn more</a>
+            {p.link && (
+              <a class="arrow-link" href={href(p.link)}>
+                {p.link_label ?? 'Learn more'}
+                <span class="visually-hidden"> about {p.title}</span>
+              </a>
+            )}
           </div>
         ))
       }
     </div>
-    <p class="muted note">Members come from EE, BME, neuroscience, CS and more. No experience required.</p>
+    {home.pillars_note && <p class="muted note">{home.pillars_note}</p>}
   </section>
 
   <!-- Featured projects -->
   <section class="band" aria-labelledby="projects-heading">
     <div class="section container">
       <div class="section-head">
-        <div class="stack" style="--stack-gap: 12px">
-          <p class="eyebrow">Featured projects</p>
-          <h2 id="projects-heading">What members are building</h2>
-        </div>
+        <h2 id="projects-heading">What members are building</h2>
         <a class="arrow-link" href={href('/projects')}>All projects</a>
       </div>
       {
@@ -103,7 +86,6 @@ const pillars = [
   <!-- Events + get involved -->
   <section class="section container split">
     <div class="stack" aria-labelledby="events-heading">
-      <p class="eyebrow">Upcoming events</p>
       <h2 id="events-heading">On the calendar</h2>
       <ul class="event-list" data-upcoming-list data-limit="3" data-empty-id="no-events">
         {upcomingShown.map((e, i) => <EventItem event={e} compact hidden={i >= 3} />)}
@@ -116,7 +98,6 @@ const pillars = [
     </div>
 
     <div class="stack" aria-labelledby="join-heading">
-      <p class="eyebrow">Get involved</p>
       <h2 id="join-heading">Start this semester</h2>
       <ol class="steps">
         <li><span class="step mono" aria-hidden="true">1</span><span>Come to a general body meeting.</span></li>
@@ -134,10 +115,7 @@ const pillars = [
     latest && (
       <section class="container latest" aria-labelledby="pub-heading">
         <div class="section-head">
-          <div class="stack" style="--stack-gap: 12px">
-            <p class="eyebrow">Latest publication</p>
-            <h2 id="pub-heading" class="visually-hidden">Latest publication</h2>
-          </div>
+          <h2 id="pub-heading">Latest publication</h2>
           <a class="arrow-link" href={href('/publications')}>All publications</a>
         </div>
         <PublicationCard publication={latest} horizontal />
