@@ -11,4 +11,4 @@ start_date: 2027-01-11
 end_date: 2027-05-03
 draft: false
 ---
-This is **sample content**. Replace or delete it in Pages CMS before launch.
+Stay tuned for more details!
