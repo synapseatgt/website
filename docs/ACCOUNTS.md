@@ -2,11 +2,11 @@
 
 Synapse owns every account. Individuals only get roles inside them. Every account has **at least two admins** and two recovery methods belonging to two different officers. **No passwords in this file.**
 
-_Last reviewed: [date] by [name]_
+_Last reviewed: 11/14/26 by Krithi Iyer
 
 | Account | Owned by | Admins (≥ 2) | Recovery method | Notes |
 | --- | --- | --- | --- | --- |
-| GitHub organisation `synapseatgt` | Synapse | [President], [Website lead] | Each owner's own 2FA + recovery codes | Require 2FA for all members (org setting). Repo is public. |
+| GitHub organization `synapseatgt` | Synapse | Krithi Iyer, [Website lead] | Each owner's own 2FA + recovery codes | Require 2FA for all members (org setting). Repo is public. |
 | GitHub team `editors` (write) | GitHub org | Org owners | — | Officers who update content |
 | GitHub team `web` (maintain) | GitHub org | Org owners | — | Developers |
 | Pages CMS app | Installed on the org's repo | Org owners | — | Access follows GitHub teams. Review email collaborators each handoff. |
@@ -19,6 +19,6 @@ _Last reviewed: [date] by [name]_
 
 | Role | Name | GitHub username | Since |
 | --- | --- | --- | --- |
-| Org owner (president) | | | |
+| Org owner | Krithi Iyer | https://github.com/kreeethi| 2026 | 
 | Org owner (website lead) | | | |
 | Editors | | | |
