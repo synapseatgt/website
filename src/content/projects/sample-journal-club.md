@@ -12,6 +12,10 @@ skills:
   - Signal Processing
   - Literature Review
   - Data Collection & Presentation
+goals: >
+  Our goal is to record and compare common EEG artifacts and deliver an
+  interactive artifact demo, a reference guide, and a comparison poster for
+  UROP.
 start_date: 2027-01-11
 end_date: 2027-05-03
 draft: false
