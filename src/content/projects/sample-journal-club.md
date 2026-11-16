@@ -3,7 +3,7 @@ title: EEG Artifact Detection
 summary: Identifying and analyzing non-neural artifacts in EEG recordings to
   improve signal quality.
 category: Engineering Projects
-status: Planned
+status: Recruiting
 featured: true
 leads:
   - David Kwack
@@ -18,6 +18,7 @@ goals: >
   UROP.
 start_date: 2027-01-11
 end_date: 2027-05-03
+recruitment_url: https://docs.google.com/forms/d/e/1FAIpQLSfzErLDQYHB37zzSb0ZVPzlEZws3OEQkpfJ8VcUQYopP20ejg/viewform
 draft: false
 ---
 Our team will record and characterize the most common EEG artifacts such as, eye blinks, eye movements, jaw clenching, muscle activity, head movement. We will collect short, structured recordings in which a participant performs each artifact on cue, with markers in the data so every event is labeled. This gives us clean examples of what each artifact looks like in the time domain, the frequency domain, and across electrode locations, whether that be Fz or Oz. 
